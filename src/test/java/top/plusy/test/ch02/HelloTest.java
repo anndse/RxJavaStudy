@@ -1,4 +1,6 @@
-import top.plusy.Hello;
+package top.plusy.test.ch02;
+
+import top.plusy.ch02.Hello;
 
 public class HelloTest {
     public static void main(String[] args){

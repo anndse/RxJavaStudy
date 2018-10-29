@@ -1,4 +1,4 @@
-package top.plusy;
+package top.plusy.ch02;
 
 import io.reactivex.Notification;
 import io.reactivex.Observable;
