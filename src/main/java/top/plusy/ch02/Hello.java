@@ -9,55 +9,20 @@ import io.reactivex.functions.Consumer;
 
 public class Hello {
     public void sayHello(){
-        Observable.just("Hello World").subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                System.out.println(s);
-            }
-        });
+        Observable.just("Hello World").subscribe(System.out::println);
     }
 
     public void sayHelloV2(){
-        Observable.just("Hello World").subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                System.out.println(s);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                System.out.println(throwable.getMessage());
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                System.out.println("onComplete()");
-            }
-        });
+        Observable.just("Hello World").subscribe(System.out::println,
+                throwable -> System.out.println(throwable.getMessage()),
+                () -> System.out.println("onComplete()"));
     }
 
     public void sayHelloV3(){
-        Observable.just("Hello World").subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                System.out.println(s);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                System.out.println(throwable.getMessage());
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-                System.out.println("OnComplete()");
-            }
-        }, new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) throws Exception {
-                System.out.println("Subscribe");
-            }
-        });
+        Observable.just("Hello World").subscribe(System.out::println,
+                throwable -> System.out.println(throwable.getMessage()),
+                () -> System.out.println("OnComplete()"),
+                disposable -> System.out.println("Subscribe"));
     }
 
     public void sayHelloV4(){
@@ -85,84 +50,19 @@ public class Hello {
     }
     public void sayHelloWithDo(){
         Observable.just("Hello")
-                .doOnNext(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        System.out.println("doOnNext: " + s);
-                    }
-                })
-                .doAfterNext(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        System.out.println("doAfterNext:"+s);
-                    }
-                })
-                .doAfterTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        System.out.println("doAfterTerminate");
-                    }
-                })
-                .doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        System.out.println("doOnComplete:");
-                    }
-                })
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        System.out.println("doFinally:");
-                    }
-                })
-                .doOnDispose(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        System.out.println("doOnDispose");
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        System.out.println(throwable.getMessage());
-                    }
-                })
-                .doOnEach(new Consumer<Notification<String>>() {
-                    @Override
-                    public void accept(Notification<String> stringNotification) throws Exception {
-                        System.out.println("doOnEach:" + (stringNotification.isOnNext() ?
-                                "onNext" : stringNotification.isOnComplete() ?
-                                "onComplete" : "onError"));
-                    }
-                })
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        System.out.println("doOnSubscribe");
-                    }
-                })
-                .doOnLifecycle(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        System.out.println("doOnLifecycle: " + disposable.isDisposed());
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        System.out.println("doOnLifecycle: run");
-                    }
-                })
-                .doOnTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        System.out.println("doOnTerminate");
-                    }
-                })
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        System.out.println("RCV: "+s);
-                    }
-                });
+                .doOnNext(s -> System.out.println("doOnNext: " + s))
+                .doAfterNext(s -> System.out.println("doAfterNext:"+s))
+                .doAfterTerminate(() -> System.out.println("doAfterTerminate"))
+                .doOnComplete(() -> System.out.println("doOnComplete:"))
+                .doFinally(() -> System.out.println("doFinally:"))
+                .doOnDispose(() -> System.out.println("doOnDispose"))
+                .doOnError(throwable -> System.out.println(throwable.getMessage()))
+                .doOnEach(stringNotification -> System.out.println("doOnEach:" + (stringNotification.isOnNext() ?
+                        "onNext" : stringNotification.isOnComplete() ?
+                        "onComplete" : "onError")))
+                .doOnSubscribe(disposable -> System.out.println("doOnSubscribe"))
+                .doOnLifecycle(disposable -> System.out.println("doOnLifecycle: " + disposable.isDisposed()), () -> System.out.println("doOnLifecycle: run"))
+                .doOnTerminate(() -> System.out.println("doOnTerminate"))
+                .subscribe(s -> System.out.println("RCV: "+s));
     }
 }
