@@ -1,11 +1,8 @@
 package top.plusy.ch02;
 
-import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 public class Hello {
     public void sayHello(){

@@ -6,8 +6,8 @@ public class ColdObservableTest {
 
     public static void main(String []args) {
         ColdObservable coldObservable = new ColdObservable();
-        //coldObservable.ColdObservableUse();
-        //coldObservable.coldObservableToHotObservable();
+        coldObservable.ColdObservableUse();
+        coldObservable.coldObservableToHotObservable();
         coldObservable.subjectUse();
     }
 }
